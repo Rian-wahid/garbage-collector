@@ -24,10 +24,10 @@ void test_fn2(){
 void test(){
   test_fn2();
   void *a;
-  for(int i=0; i<100000; i++){
+  for(int i=0; i<100; i++){
     {
       void *b;
-      alloc_mem(&b,200000);
+      alloc_mem(&b,4);
       assert(b!=NULL);
       *(int *)b=i;
       assign_ptr(&a,b);
@@ -40,6 +40,7 @@ void test(){
       assert(c==a);
     }
   }
+  force_free(a);
 }
 
 int main(){

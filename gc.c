@@ -103,20 +103,7 @@ void clear(){
   clean();
 }
 
-void reuse_ptr_check(void **ptr){
-  for(size_t i=0; i<ptr_count; i++){
-    for(size_t j=0; j<ptrs[i].holder_count; j++){
-      if(ptrs[i].holders[j]==ptr){
-        *ptr=NULL;
-        remove_unused_holder(&ptrs[i]);
-      }
-    }
-  }
-}
-
-
 void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
-  reuse_ptr_check(ptr_to_ptr);
   *ptr_to_ptr=ptr;
   ptr_hold pth={.ptr=ptr};
   add_holder(&pth, ptr_to_ptr);
