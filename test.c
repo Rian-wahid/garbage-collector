@@ -56,9 +56,8 @@ void test(){
     alloc_mem(ptrs[i],4);
     *(int *)*ptrs[i]=i;
     assign_ptr(ptrs2[i],*ptrs[i]);
-    assign_ptr(ptrs3[i],*ptrs2[i]);
     *ptrs[i]=NULL;
-    clean();
+    assign_ptr(ptrs3[i],*ptrs2[i]);
   }
   for(int i=0; i<total; i++){
     assert(*(int *)*ptrs2[i]==i);

@@ -114,11 +114,13 @@ void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
   }else{
     bool dup=false;
     for(size_t i=0; i<ptr_count; i++){
+     
       if(ptrs[i].ptr==ptr){
         dup=true;
         free(pth.holders);
         add_holder(&ptrs[i], ptr_to_ptr);
       }
+      remove_unused_holder(&ptrs[i]);
     }
     if(!dup){
       ptr_count++;
