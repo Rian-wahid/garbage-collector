@@ -1,7 +1,8 @@
 #include"gc.h"
 #include<assert.h>
+#include <stdio.h>
 #include<stdlib.h>
-
+#include<pthread.h>
 void *test_fn1(){
   void *ptr; 
   alloc_mem(&ptr,4);
@@ -70,8 +71,19 @@ void test(){
 
 }
 
-int main(){
-  atexit(&clear);
+void *thread_test(void *argp){
   test();
+  return argp;
+}
+int main(){
+  pthread_t thrd[2];
+  int err=pthread_create(&thrd[0],NULL,thread_test,NULL);
+  err+=pthread_create(&thrd[1],NULL,thread_test,NULL);
+  if(err!=0){
+    perror("failed to create thread");
+    exit(1);
+  }
+  pthread_join(thrd[0],NULL);
+  pthread_join(thrd[1],NULL);
   return 0;
 }
