@@ -25,7 +25,7 @@ void test_fn2(){
 void test(){
   test_fn2();
   void *a;
-  for(int i=0; i<20; i++){
+  for(int i=0; i<200; i++){
     {
       void *b;
       alloc_mem(&b,4);
