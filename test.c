@@ -31,11 +31,12 @@ struct timespec create_time(int nanosec){
 
 void test(){
   test_fn2();
-  struct timespec ts=create_time(1000);
-  assert(nanosleep(&ts,&ts)==0);
-  ts=create_time(1200);
+  struct timespec tsr=create_time(1),ts=create_time(10000);
+  assert(nanosleep(&ts,&tsr)==0);
+  ts=create_time(12000);
+  tsr=create_time(1);
   void *a;
-  for(int i=0; i<200; i++){
+  for(int i=0; i<1000; i++){
     {
       void *b;
       alloc_mem(&b,4);
@@ -51,9 +52,10 @@ void test(){
       assert(c==a);
     }
   }
-  assert(nanosleep(&ts,&ts)==0);
-  ts=create_time(2000);
-  int total=200;
+  assert(nanosleep(&ts,&tsr)==0);
+  ts=create_time(20000);
+  tsr=create_time(1);
+  int total=1000;
   void ***ptrs=malloc(total*sizeof(void *));
   void ***ptrs2=malloc(total*sizeof(void *));
   void ***ptrs3=malloc(total*sizeof(void *));
@@ -62,8 +64,9 @@ void test(){
     ptrs2[i]=malloc(sizeof(void *));
     ptrs3[i]=malloc(sizeof(void *));
   }
-  assert(nanosleep(&ts,&ts)==0);
-  ts=create_time(900);
+  assert(nanosleep(&ts,&tsr)==0);
+  ts=create_time(9000);
+  tsr=create_time(1);
   for(int i=0; i<total; i++){
     alloc_mem(ptrs[i],4);
     *(int *)*ptrs[i]=i;
@@ -71,7 +74,7 @@ void test(){
     *ptrs[i]=NULL;
     assign_ptr(ptrs3[i],*ptrs2[i]);
   }
-  assert(nanosleep(&ts,&ts)==0);
+  assert(nanosleep(&ts,&tsr)==0);
   for(int i=0; i<total; i++){
     assert(*(int *)*ptrs2[i]==i);
     assert(*(int *)*ptrs3[i]==i);
@@ -82,7 +85,6 @@ void test(){
   free(ptrs);
   free(ptrs2);
   free(ptrs3);
-
 }
 
 void *thread_test(void *argp){
