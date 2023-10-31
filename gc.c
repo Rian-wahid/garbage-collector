@@ -10,7 +10,7 @@ typedef struct {
   size_t holder_count;
   void **holders;
 } ptr_hold;
-bool _init_mutex=false;
+bool _gc_init_mutex=false;
 pthread_mutex_t rm_unused_holder_lock;
 pthread_mutex_t clean_lock;
 pthread_mutex_t clear_lock;
@@ -39,9 +39,9 @@ void destroy(){
   pthread_mutex_destroy(&clear_lock);
   pthread_mutex_destroy(&add_holder_lock);
 }
-void init(){
-  if(!_init_mutex){
-    _init_mutex=true;
+void gc_init(){
+  if(!_gc_init_mutex){
+    _gc_init_mutex=true;
     int err=pthread_mutex_init(&clean_lock,NULL);
     err+=pthread_mutex_init(&rm_unused_holder_lock,NULL);
     err+=pthread_mutex_init(&assign_ptr_lock,NULL);
@@ -89,7 +89,7 @@ void remove_unused_holder(ptr_hold *pth){
 }
 
 void clean(){
-  init();
+  gc_init();
   if(ptr_count==0){
     return;
   }
@@ -141,7 +141,7 @@ void add_holder(ptr_hold *pth,void *ptr){
 }
 
 void clear(){
-  init();
+  gc_init();
   pthread_mutex_lock(&clear_lock);
   for(size_t i=0; i<ptr_count; i++){
     ptrs[i].holder_count=0;
@@ -152,7 +152,7 @@ void clear(){
 }
 
 void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
-  init();
+  gc_init();
   pthread_mutex_lock(&assign_ptr_lock);
   *ptr_to_ptr=ptr;
   ptr_hold pth={.ptr=ptr};
@@ -193,7 +193,7 @@ void alloc_mem(void ** const ptr_to_ptr,size_t size){
 }
 
 void force_free(void *ptr){
-  init();
+  gc_init();
   pthread_mutex_lock(&force_free_lock);
   for(size_t i=0; i<ptr_count; i++){
     if(ptrs[i].ptr==ptr){

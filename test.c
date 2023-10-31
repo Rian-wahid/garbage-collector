@@ -76,6 +76,7 @@ void *thread_test(void *argp){
   return argp;
 }
 int main(){
+  gc_init();
   pthread_t thrd[2];
   int err=pthread_create(&thrd[0],NULL,thread_test,NULL);
   err+=pthread_create(&thrd[1],NULL,thread_test,NULL);

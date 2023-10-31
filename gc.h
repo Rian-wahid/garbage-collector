@@ -11,5 +11,7 @@ void alloc_mem(void **const ptr_to_ptr,size_t size);
 void assign_ptr(void **const ptr_to_ptr,void *ptr);
 // force garbage collector to deallocate pointer
 void force_free(void *ptr);
+
+void gc_init();
 #endif
 
