@@ -2,7 +2,6 @@
 #include<assert.h>
 #include <stdio.h>
 #include<stdlib.h>
-#include<pthread.h>
 
 void *test_fn1(){
   void *ptr; 
