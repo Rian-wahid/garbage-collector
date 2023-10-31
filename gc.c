@@ -49,10 +49,10 @@ void gc_init(){
     err+=pthread_mutex_init(&clear_lock,NULL);
     err+=pthread_mutex_init(&add_holder_lock,NULL);
     if(err!=0){
-      perror("failed to initialize mutexs (thread syncronizer)");
+      printf("failed to initialize mutexs (thread syncronizer)");
       exit(1);
     }else{
-     atexit(&destroy);
+      atexit(&destroy);
     }
   }
 }
