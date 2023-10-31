@@ -107,6 +107,7 @@ void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
   *ptr_to_ptr=ptr;
   ptr_hold pth={.ptr=ptr};
   add_holder(&pth, ptr_to_ptr);
+  bool to_clean=false;
   if(ptr_count==0){
     ptrs=malloc(sizeof(ptr_hold));
     ptrs[0]=pth;
@@ -121,6 +122,9 @@ void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
         add_holder(&ptrs[i], ptr_to_ptr);
       }
       remove_unused_holder(&ptrs[i]);
+      if(ptrs[i].holder_count==0){
+        to_clean=true;
+      }
     }
     if(!dup){
       ptr_count++;
@@ -128,7 +132,9 @@ void assign_ptr(void ** const ptr_to_ptr,void * const ptr){
       ptrs[ptr_count-1]=pth;
     }
   }
-  clean();
+  if(to_clean){
+    clean();
+  }
 }
 
 void alloc_mem(void ** const ptr_to_ptr,size_t size){
