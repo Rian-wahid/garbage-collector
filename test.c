@@ -1,6 +1,5 @@
 #include"gc.h"
 #include<assert.h>
-#include <stdio.h>
 #include<stdlib.h>
 
 void *test_fn1(){
