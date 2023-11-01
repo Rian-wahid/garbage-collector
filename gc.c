@@ -79,13 +79,14 @@ void _clean(){
   }
   size_t used=0;
   ptr_hold tmp[ptr_count*sizeof(ptr_hold)];
-  for(size_t i=0; i<ptr_count; i++){
-    remove_unused_holder(&ptrs[i]);
-    if(ptrs[i].holder_count>0){
-      tmp[used]=ptrs[i];
+  for(size_t i=ptr_count; i>0; i--){
+    size_t j=i-1;
+    remove_unused_holder(&ptrs[j]);
+    if(ptrs[j].holder_count>0){
+      tmp[used]=ptrs[j];
       used++;
     }else{
-      free(ptrs[i].ptr);
+      free(ptrs[j].ptr);
     }
   }
   if(used==0){
@@ -125,9 +126,10 @@ void add_holder(ptr_hold *pth,void *ptr){
 }
 
 void _clear(){
-  for(size_t i=0; i<ptr_count; i++){
-    ptrs[i].holder_count=0;
-    free(ptrs[i].holders);
+  for(size_t i=ptr_count; i>0; i--){
+    size_t j=i-1;
+    ptrs[j].holder_count=0;
+    free(ptrs[j].holders);
   }
   _clean();
 }
@@ -150,15 +152,15 @@ void _assign_ptr(void ** const ptr_to_ptr,void * const ptr){
     ptr_count=1;
   }else{
     bool dup=false;
-    for(size_t i=0; i<ptr_count; i++){
-     
-      if(ptrs[i].ptr==ptr){
+    for(size_t i=ptr_count; i>0; i--){
+     size_t j=i-1;
+      if(ptrs[j].ptr==ptr){
         dup=true;
         free(pth.holders);
-        add_holder(&ptrs[i], ptr_to_ptr);
+        add_holder(&ptrs[j], ptr_to_ptr);
       }
-      remove_unused_holder(&ptrs[i]);
-      if(ptrs[i].holder_count==0){
+      remove_unused_holder(&ptrs[j]);
+      if(ptrs[j].holder_count==0){
         to_clean=true;
       }
     }
