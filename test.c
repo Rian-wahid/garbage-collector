@@ -24,6 +24,19 @@ void test_fn2(){
   force_free(ptr);
 }
 
+void test_fn3(void *ptr){
+  assert(*(int *)ptr==1);
+  *(int *)ptr=2;
+}
+
+void test_fn4(){
+  void *ptr;
+  alloc_mem(&ptr,4);
+  *(int *)ptr=1;
+  test_fn3(ptr);
+  assert(*(int *)ptr==2);
+}
+
 struct timespec create_time(int nanosec){
   struct timespec tm={.tv_sec=0, .tv_nsec=nanosec};
   return tm;
@@ -31,6 +44,7 @@ struct timespec create_time(int nanosec){
 
 void test(){
   test_fn2();
+  test_fn4();
   struct timespec tsr=create_time(1),ts=create_time(10000);
   assert(nanosleep(&ts,&tsr)==0);
   ts=create_time(12000);
